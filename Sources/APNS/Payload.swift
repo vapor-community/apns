@@ -77,9 +77,8 @@ public class Payload: Codable {
     init() { }
 }
 
+/// Convenience initializers
 extension Payload {
-    
-    /// Convenience initializers
     public convenience init(message: String) {
         self.init()
         
@@ -115,4 +114,27 @@ extension Payload {
         payload.contentAvailable = true
         return payload
     }
+}
+
+/// Equatable
+extension Payload: Equatable {
+    public static func ==(lhs: Payload, rhs: Payload) -> Bool {
+        return lhs.badge == rhs.badge ||
+            lhs.title == rhs.title ||
+            lhs.body == rhs.body ||
+            lhs.titleLocKey == rhs.titleLocKey ||
+            (lhs.titleLocArgs != nil &&
+                rhs.titleLocArgs != nil &&
+                lhs.titleLocArgs! == rhs.titleLocArgs!) ||
+            lhs.actionLocKey == rhs.actionLocKey  ||
+            lhs.bodyLocKey == rhs.bodyLocKey ||
+            (lhs.bodyLocArgs != nil &&
+                rhs.bodyLocArgs != nil &&
+                lhs.bodyLocArgs == rhs.bodyLocArgs) ||
+            lhs.launchImage == rhs.launchImage ||
+            lhs.sound == rhs.sound ||
+            lhs.contentAvailable == rhs.contentAvailable ||
+            lhs.threadId == rhs.threadId
+    }
+    
 }
