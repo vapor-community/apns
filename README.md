@@ -1,3 +1,6 @@
 # APNS
 
-A description of this package.
+Pure Swift/Vapor 3 APNS Library.
+
+Note: This requires HTTP/2.
+Vapor is supposed to get a native HTTP/2 client built in so until then, this library is unoperational
