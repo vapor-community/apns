@@ -74,7 +74,8 @@ public class Payload: Codable {
     /// Any extra key-value pairs to add to the JSON
     public var extra: [String: String] = [:]
     
-    init() { }
+    /// Empty Initializer
+    public init() { }
 }
 
 /// Convenience initializers
