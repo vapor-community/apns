@@ -55,6 +55,11 @@ public enum SimpleError: Error {
     case string(message: String)
 }
 
+public enum MessageError: Error {
+    case unableToGenerateBody
+    case invalidURL
+}
+
 public enum InitializationError: Error, CustomStringConvertible {
     case noAuthentication
     case noTopic
