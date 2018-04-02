@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class APNSPayload: Codable {
+public class Payload: Codable {
     
     /// The number to display as the badge of the app icon.
     public var badge: Int?
@@ -73,4 +73,46 @@ public class APNSPayload: Codable {
     
     /// Any extra key-value pairs to add to the JSON
     public var extra: [String: String] = [:]
+    
+    init() { }
+}
+
+extension Payload {
+    
+    /// Convenience initializers
+    public convenience init(message: String) {
+        self.init()
+        
+        self.body = message
+    }
+    
+    public convenience init(title: String, body: String) {
+        self.init()
+        
+        self.title = title
+        self.body = body
+    }
+    
+    public convenience init(title: String, subtitle: String, body: String) {
+        self.init()
+        
+        self.title = title
+        self.subtitle = subtitle
+        self.body = body
+    }
+    
+    public convenience init(title: String, body: String, badge: Int) {
+        self.init()
+        
+        self.title = title
+        self.body = body
+        self.badge = badge
+    }
+    
+    /// A simple, already made, Content-Available payload
+    public static var contentAvailable: Payload {
+        let payload = Payload()
+        payload.contentAvailable = true
+        return payload
+    }
 }
