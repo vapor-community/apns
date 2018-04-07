@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import Vapor
 
-public class Payload: Codable {
+public class Payload: Content {
     
     /// The number to display as the badge of the app icon.
     public var badge: Int?
@@ -72,7 +73,7 @@ public class Payload: Codable {
     public var threadId: String?
     
     /// Any extra key-value pairs to add to the JSON
-    public var extra: [String: String] = [:]
+    public var extra: [String : String] = [:]
     
     /// Empty Initializer
     public init() { }

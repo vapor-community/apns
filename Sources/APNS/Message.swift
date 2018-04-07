@@ -56,6 +56,7 @@ public struct Message {
     /// Use the development or production servers
     public let development: Bool
     
+    
     public init(priority: Priority = .immediately, profile: Profile, deviceToken: String, payload: Payload, on container: Container, development: Bool = false) throws {
         self.profile = profile
         self.priority = priority
@@ -65,14 +66,14 @@ public struct Message {
     }
     
     internal func generateRequest(on container: Container) throws -> Request {
-        
         let request = Request(using: container)
         request.http.method = .POST
+        
+        request.http.headers.add(name: .connection, value: "Keep-Alive")
         request.http.headers.add(name: HTTPHeaderName("authorization"), value: "bearer \(self.profile.token ?? "")")
         request.http.headers.add(name: HTTPHeaderName("apns-id"), value: self.messageId)
         request.http.headers.add(name: HTTPHeaderName("apns-priority"), value: "\(self.priority.rawValue)")
         request.http.headers.add(name: HTTPHeaderName("apns-topic"), value: self.profile.topic)
-        request.http.headers.add(name: .connection, value: "Keep-Alive")
         
         if let expiration = self.expirationDate {
             request.http.headers.add(name: HTTPHeaderName("apns-expiration"), value: String(expiration.timeIntervalSince1970.rounded()))
@@ -87,10 +88,8 @@ public struct Message {
             try self.profile.generateToken()
         }
         
-        guard let payloadBody = self.payload.body else {
-            throw MessageError.unableToGenerateBody
-        }
-        request.http.body = HTTPBody(string: payloadBody)
+        let encoder = JSONEncoder()
+        request.http.body = try encoder.encodeBody(from: PayloadContent(payload: self.payload))
         
         if self.development {
             guard let url = URL(string: "https://api.development.push.apple.com/3/device/\(self.deviceToken)") else {
