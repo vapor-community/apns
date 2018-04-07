@@ -41,7 +41,7 @@ public final class ES256: JWTAlgorithm {
     }
     
     public func sign(_ plaintext: LosslessDataConvertible) throws -> Data {
-        let digest = Bytes(try SHA256.digest(plaintext))
+        let digest = Bytes(try SHA256.hash(plaintext))
         let ecKey = try self.newECKeyPair()
         
         guard let signature = ECDSA_do_sign(digest, Int32(digest.count), ecKey) else {
@@ -64,7 +64,7 @@ public final class ES256: JWTAlgorithm {
     public func verify(_ signature: Data, signs plaintext: Data) throws -> Bool {
         var signaturePointer: UnsafePointer? = UnsafePointer(Bytes(signature))
         let signature = d2i_ECDSA_SIG(nil, &signaturePointer, signature.count)
-        let digest = Bytes(try SHA256.digest(plaintext))
+        let digest = Bytes(try SHA256.hash(plaintext))
         let ecKey = try self.newECPublicKey()
         let result = ECDSA_do_verify(digest, Int32(digest.count), signature, ecKey)
         if result == 1 {
