@@ -8,7 +8,7 @@
 import Foundation
 import Vapor
 
-public class Payload: Content {
+public final class Payload: Content {
     
     /// The number to display as the badge of the app icon.
     public var badge: Int?
