@@ -56,7 +56,7 @@ public struct Message {
     /// Use the development or production servers
     public let development: Bool
     
-    
+    /// Creates a new message
     public init(priority: Priority = .immediately, profile: Profile, deviceToken: String, payload: Payload, on container: Container, development: Bool = false) throws {
         self.profile = profile
         self.priority = priority
@@ -89,7 +89,7 @@ public struct Message {
         }
         
         let encoder = JSONEncoder()
-        request.http.body = try encoder.encodeBody(from: PayloadContent(payload: self.payload))
+        request.http.body = try HTTPBody(data: encoder.encode(PayloadContent(payload: self.payload)))
         
         if self.development {
             guard let url = URL(string: "https://api.development.push.apple.com/3/device/\(self.deviceToken)") else {
