@@ -24,8 +24,7 @@ public final class APNS: ServiceType {
     
     /// Send the message
     public func send(message: Message) throws -> Future<APNSResult> {
-        let response = try self.client.respond(to: message.generateRequest(on: self.worker))
-        return response.map(to: APNSResult.self) { response in
+        return try self.client.send(message.generateRequest(on: self.worker)).map(to: APNSResult.self) { response in
             guard let body = response.http.body.data, body.count != 0 else {
                 return APNSResult.success(
                     apnsId: message.messageId,
@@ -51,7 +50,7 @@ public final class APNS: ServiceType {
     }
     
     public func sendRaw(message: Message) throws -> Future<Response> {
-        return try self.client.respond(to: message.generateRequest(on: self.worker))
+        return try self.client.send(message.generateRequest(on: self.worker))
     }
     
 }
