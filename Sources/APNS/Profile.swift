@@ -77,7 +77,7 @@ public class Profile {
         let JWTheaders = JWTHeader(alg: "ES256", cty: nil, crit: nil, kid: self.keyId)
         let payload = APNSJWTPayload(iss: self.teamId)
         let signer = JWTSigner(algorithm: ES256(key: self.privateKey))
-        var jwt = JWT(header: JWTheaders, payload: payload)
+        let jwt = JWT(header: JWTheaders, payload: payload)
         let signed = try jwt.sign(using: signer)
         guard let token = String(bytes: signed, encoding: .utf8) else {
             throw TokenError.tokenWasNotGeneratedCorrectly
